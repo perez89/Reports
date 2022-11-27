@@ -1,0 +1,14 @@
+﻿global using Api.Controllers;
+global using Api.Mappers;
+global using AutoMapper;
+global using Domain.Notes;
+global using Domain.Reports;
+global using FluentAssertions;
+global using Microsoft.AspNetCore.Http;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using System;
+global using System.Collections.Generic;
+global using System.Threading.Tasks;
+global using Xunit;

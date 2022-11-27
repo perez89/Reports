@@ -1,0 +1,29 @@
+﻿# To run locally: docker-compose up --build --abort-on-container-exit
+version: "3.7"
+services:
+  tests:
+    build:
+      context: .
+      target: test
+    image: image-test
+    command: >
+      bash -cxe "
+        /bin/wait-for.sh -t 600 api-reports:80 -- echo api-reports is ready
+        sleep 5
+        echo Running component tests...
+        dotnet test ./test/IntegrationTests/ApiIntegrationTests.csproj
+      "
+    environment:
+       INTEGRATIONTESTS: "true"
+    depends_on:
+      - api-minderax
+  api-reports:
+    build: .
+    image: buildimage
+    command: >
+      /bin/sh -cxe "
+        sleep 10
+        dotnet Api.dll
+        "
+    environment:
+     version: localmachine
