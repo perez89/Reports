@@ -69,7 +69,7 @@ public class ReportsController : ControllerBase
         }
         else
         {
-            _ReportsService.Update(_mapper.Map<Report>(Report));
+            await _ReportsService.UpdateAsync(_mapper.Map<Report>(Report));
 
             return NoContent();
         }

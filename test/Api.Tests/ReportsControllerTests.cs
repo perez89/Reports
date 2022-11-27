@@ -256,7 +256,7 @@ public class ReportControllerTests
         };
         _ReportsService.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(expected);
 
-        _ReportsService.Setup(s => s.Update(It.IsAny<Report>())).Returns(expected);
+        _ReportsService.Setup(s => s.UpdateAsync(It.IsAny<Report>())).ReturnsAsync(expected);
 
         // Act
         var response = await _ReportController.PutAsync(ReportModel.Id.Value, ReportModel);
@@ -269,7 +269,7 @@ public class ReportControllerTests
         okObjectResult?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
         _ReportsService.Verify(v => v.GetAsync(It.IsAny<Guid>()), Times.Once);
-        _ReportsService.Verify(v => v.Update(It.IsAny<Report>()), Times.Once);
+        _ReportsService.Verify(v => v.UpdateAsync(It.IsAny<Report>()), Times.Once);
     }
 
     [Fact]

@@ -278,7 +278,7 @@ public class NoteControllerTests
         };
         _NotesService.Setup(s => s.GetAsync(It.IsAny<Guid>())).ReturnsAsync(expected);
 
-        _NotesService.Setup(s => s.Update(It.IsAny<Note>())).Returns(expected);
+        _NotesService.Setup(s => s.UpdateAsync(It.IsAny<Note>())).ReturnsAsync(expected);
 
         // Act
         var response = await _NoteController.PutAsync(ReportModel.Id.Value, ReportModel);
@@ -291,7 +291,7 @@ public class NoteControllerTests
         okObjectResult?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
 
         _NotesService.Verify(v => v.GetAsync(It.IsAny<Guid>()), Times.Once);
-        _NotesService.Verify(v => v.Update(It.IsAny<Note>()), Times.Once);
+        _NotesService.Verify(v => v.UpdateAsync(It.IsAny<Note>()), Times.Once);
     }
 
     [Fact]

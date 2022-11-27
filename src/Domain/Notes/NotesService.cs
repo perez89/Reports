@@ -17,12 +17,16 @@ public sealed class NotesService : INotesService
         if (Report == null)
             throw new ReportIdNotFoundException("The Report id of this Note does not exist.");
 
-        return await _noteRepository.CreateAsync(Note);
+        var result =  await _noteRepository.CreateAsync(Note);
+        await _noteRepository.SaveAsync();
+        return result;
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        return await _noteRepository.DeleteAsync(id);
+        var result = await _noteRepository.DeleteAsync(id);
+        await _noteRepository.SaveAsync();
+        return result;
     }
 
     public async Task<IEnumerable<Note>> GetAllAsync()
@@ -44,8 +48,10 @@ public sealed class NotesService : INotesService
         return result.ToList();
     }
 
-    public Note Update(Note Note)
+    public async Task<Note> UpdateAsync(Note Note)
     {
-        return _noteRepository.Update(Note);
+        var note =  _noteRepository.Update(Note);
+        await _noteRepository.SaveAsync();
+        return note;
     }
 }

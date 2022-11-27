@@ -70,7 +70,7 @@ public class NotesController : ControllerBase
         }
         else
         {
-            _NotesService.Update(_mapper.Map<Note>(Note));
+            _NotesService.UpdateAsync(_mapper.Map<Note>(Note));
 
             return NoContent();
         }

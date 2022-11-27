@@ -15,12 +15,16 @@ public sealed class ReportsService : IReportsService
         if (Report.Id.HasValue)
             return null;
 
-        return await _reportRepository.CreateAsync(Report);
+        var result = await _reportRepository.CreateAsync(Report);
+        await _reportRepository.SaveAsync();
+        return result;
     }
 
     public async Task<bool> DeleteAsync(Guid id)
     {
-        return await _reportRepository.DeleteAsync(id);
+        var result = await _reportRepository.DeleteAsync(id);
+        await _reportRepository.SaveAsync();
+        return result;
     }
 
     public async Task<IEnumerable<Report>> GetAllAsync()
@@ -41,8 +45,10 @@ public sealed class ReportsService : IReportsService
         return result.ToList();
     }
 
-    public Report Update(Report Report)
+    public async Task<Report> UpdateAsync(Report Report)
     {
-        return _reportRepository.Update(Report);
+        var result = _reportRepository.Update(Report);
+        await _reportRepository.SaveAsync();
+        return result;
     }
 }
