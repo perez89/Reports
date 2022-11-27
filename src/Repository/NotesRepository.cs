@@ -1,6 +1,6 @@
 namespace Repository;
 
-public sealed class NotesRepository : BaseGenericRepository<Note>, INotesRepository<Note> 
+public sealed class NotesRepository : BaseGenericRepository<Note>, INotesRepository<Note>, IDisposable
 {
     private readonly ArchiveContext _context;
 
@@ -14,6 +14,10 @@ public sealed class NotesRepository : BaseGenericRepository<Note>, INotesReposit
         return await _context.Notes.Where(c => ReportId.Equals(c.ReportId)).ToListAsync();
     }
 
+    public void Dispose()
+    {
+        _context.Dispose();
+    }
 
     //public async Task<IEnumerable<Note>> GetAllAsync()
     //{

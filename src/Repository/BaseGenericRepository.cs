@@ -1,4 +1,6 @@
 using Domain;
+using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Repository;
 
@@ -44,13 +46,22 @@ public abstract class BaseGenericRepository<T>: IBaseGenericRepository<T> where 
         return await _dbSet.FirstOrDefaultAsync(c => id.Equals(c.Id));
     }
 
-    public T Update(T report)
+    public async Task<T> UpdateAsync(T report)
     {
-        _dbSet.Attach(report);
-        _dbContext.Entry(report).State = EntityState.Modified;
+        //_dbSet.Attach(report);
+        //_dbContext.Entry(report).State = EntityState.Modified;
+
+        //return report;
+        var original = await _dbSet.FirstOrDefaultAsync(c => report.Id.Equals(c.Id));
+        if (original != null) {
+            _dbSet.Attach(original);
+            _dbContext.Entry(original)
+            .CurrentValues
+                        .SetValues(report);
+            _dbContext.Entry(original).State = EntityState.Modified;
+        }
 
         return report;
-
         //var cmt = await _dbSet.FirstOrDefaultAsync(c => report.Id.Equals(c.Id));
 
         ////if (cmt != null)
@@ -62,6 +73,8 @@ public abstract class BaseGenericRepository<T>: IBaseGenericRepository<T> where 
 
         //return cmt;
     }
+
+  
 
     //public async Task<IEnumerable<T>> GetAllAsync()
     //{

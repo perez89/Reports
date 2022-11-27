@@ -59,19 +59,28 @@ public class ReportsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> PutAsync([FromRoute] Guid id, [FromBody] Models.Report Report)
     {
-        var result = await _ReportsService.GetAsync(id);
+        try
+        {   
+            if (!id.ToString().Equals(Report.Id.ToString()))
+                return BadRequest();
 
-        if (result == null)
-        {
-            result = await _ReportsService.CreateAsync(_mapper.Map<Report>(Report));
+            var result = await _ReportsService.GetAsync(id);
 
-            return CreatedAtAction(nameof(GetAsync), new { id = result.Id.Value }, _mapper.Map<Models.Report>(result));
+            if (result == null)
+            {
+                result = await _ReportsService.CreateAsync(_mapper.Map<Report>(Report));
+
+                return CreatedAtAction(nameof(GetAsync), new { id = result.Id.Value }, _mapper.Map<Models.Report>(result));
+            }
+            else
+            {
+                await _ReportsService.UpdateAsync(_mapper.Map<Report>(Report));
+
+                return NoContent();
+            }
         }
-        else
-        {
-            await _ReportsService.UpdateAsync(_mapper.Map<Report>(Report));
-
-            return NoContent();
+        catch (Exception ex) {
+            return BadRequest("Something went wroing during the Update.");
         }
     }
 

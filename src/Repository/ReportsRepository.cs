@@ -1,11 +1,18 @@
 namespace Repository;
 
-public sealed class ReportsRepository : BaseGenericRepository<Report>, IReportsRepository<Report>
+public sealed class ReportsRepository : BaseGenericRepository<Report>, IReportsRepository<Report>, IDisposable
 {
+    private readonly ArchiveContext _context;
+
     public ReportsRepository(ArchiveContext context) : base(context)
     {
+        _context = context;
     }
 
+    public void Dispose()
+    {
+        _context.Dispose();
+    }
     //public async Task<IEnumerable<Report>> GetAllAsync()
     //{
     //    return await _context.Reports.ToListAsync();

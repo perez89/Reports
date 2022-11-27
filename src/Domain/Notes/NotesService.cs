@@ -50,7 +50,7 @@ public sealed class NotesService : INotesService
 
     public async Task<Note> UpdateAsync(Note Note)
     {
-        var note =  _noteRepository.Update(Note);
+        var note = await _noteRepository.UpdateAsync(Note);
         await _noteRepository.SaveAsync();
         return note;
     }

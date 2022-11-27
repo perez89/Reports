@@ -47,7 +47,7 @@ public sealed class ReportsService : IReportsService
 
     public async Task<Report> UpdateAsync(Report Report)
     {
-        var result = _reportRepository.Update(Report);
+        var result = await _reportRepository.UpdateAsync(Report);
         await _reportRepository.SaveAsync();
         return result;
     }
